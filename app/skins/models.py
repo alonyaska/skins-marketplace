@@ -1,6 +1,6 @@
 
 
-from sqlalchemy import Column, Integer, String, JSON, ForeignKey
+from sqlalchemy import Column, Integer, String, JSON
 from sqlalchemy.orm import relationship
 
 from  app.database import Base
@@ -12,7 +12,6 @@ class SkinsModel(Base):
 
 
     id = Column(Integer, primary_key=True)
-    owner_id = Column(ForeignKey("users.id"))
     name = Column(String, nullable=False)
     price = Column(Integer, nullable=False)
     date = Column(Integer, nullable=False)
