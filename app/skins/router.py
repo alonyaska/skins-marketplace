@@ -3,7 +3,7 @@ from fastapi import APIRouter
 
 from app.skins.dao import SkinsDao
 from app.skins.service import SkinsService
-from app.skins.shemas import SSkins
+from app.skins.sсhemas import SSkins
 
 router  = APIRouter(
     prefix="/AllSkins",

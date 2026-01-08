@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 
-from app.skins.shemas import SSkins
+from app.skins.sсhemas import SSkins
 
 
 class SUserInventory(BaseModel):
