@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
-
+from app.config import  settings
 from  jose import jwt
 from passlib.context import CryptContext
 from pydantic import EmailStr
-
+from app.Users.models import UsersModel
 from app.Users.dao import UsersDao
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -22,7 +22,7 @@ def create_access_token(data: dict) -> str:
     expire = datetime.utcnow() + timedelta(minutes=30)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(
-        to_encode, "qwertyuio", "HS256"
+        to_encode, settings.SECRET_KEY, settings.ALGORITHM
     )
     return  encoded_jwt
 
@@ -31,6 +31,6 @@ def create_access_token(data: dict) -> str:
 
 async  def authenticate_user(email:EmailStr, password: str):
     user = await UsersDao.get_one_or_none(email= email)
-    if not user or not verify_password(password, user.password):
+    if not user or not verify_password(password, user.hashed_password):
         return  None
     return  user
