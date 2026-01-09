@@ -1,17 +1,18 @@
 from datetime import datetime
 
-from fastapi import Request, HTTPException
+from fastapi import Request
 from fastapi.params import Depends
 from jose import jwt, JWTError
 
 from app.Users.dao import UsersDao
 from app.config import settings
+from app.exceptions import UserNotLogInException, TokenAbsentException, TokenIsExpireException, IncorrectTokenType
 
 
 def get_token(request: Request):
     token = request.cookies.get("user_inventory_token")
     if not  token:
-        raise  HTTPException(status_code=401, detail="Not Authorized")
+        raise  UserNotLogInException
     return token
 
 
@@ -23,16 +24,16 @@ async def  get_current_user(token: str = Depends(get_token)):
         )
 
     except JWTError:
-        raise HTTPException(status_code=401, detail="lol nety jwt")
+        raise TokenAbsentException
     expire: str = payload.get("exp")
     if (not expire) or (int(expire) < datetime.utcnow().timestamp()):
-        raise HTTPException(status_code=401, detail="jwt istek")
+        raise TokenIsExpireException
     user_name: str = payload.get("username")
     if not user_name:
-        raise HTTPException(status_code=401)
+        raise IncorrectTokenType
     user = await  UsersDao.find_by_name(user_name)
     if not  user:
-        raise HTTPException(status_code=401)
+        raise IncorrectTokenType
 
     return  user
 

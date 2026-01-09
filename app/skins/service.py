@@ -1,5 +1,6 @@
 from fastapi import HTTPException
 
+from app.exceptions import InventoryNotFound
 from app.skins.dao import SkinsDao
 
 
@@ -10,7 +11,7 @@ class SkinsService:
     async  def get_by_id_or_404(cls, model_id:int):
         result = await  SkinsDao.find_by_id(model_id)
         if not result:
-            raise  HTTPException(status_code=404, detail="skin not found")
+            raise  InventoryNotFound
         return result
 
 
