@@ -6,13 +6,14 @@ from jose import jwt, JWTError
 
 from app.Users.dao import UsersDao
 from app.config import settings
-from app.exceptions import UserNotLogInException, TokenAbsentException, TokenIsExpireException, IncorrectTokenType
+from app.exceptions import TokenIsExpireException, \
+    UserNotLogIn, TokenAbsentException, IncorrectTokenType
 
 
 def get_token(request: Request):
     token = request.cookies.get("user_inventory_token")
     if not  token:
-        raise  UserNotLogInException
+        raise  UserNotLogIn()
     return token
 
 
@@ -24,16 +25,16 @@ async def  get_current_user(token: str = Depends(get_token)):
         )
 
     except JWTError:
-        raise TokenAbsentException
+        raise TokenAbsentException()
     expire: str = payload.get("exp")
     if (not expire) or (int(expire) < datetime.utcnow().timestamp()):
-        raise TokenIsExpireException
+        raise TokenIsExpireException()
     user_name: str = payload.get("username")
     if not user_name:
-        raise IncorrectTokenType
+        raise IncorrectTokenType()
     user = await  UsersDao.find_by_name(user_name)
     if not  user:
-        raise IncorrectTokenType
+        raise IncorrectTokenType()
 
     return  user
 
