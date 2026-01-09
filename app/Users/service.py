@@ -29,3 +29,12 @@ class UsersService:
                                            "username": user.username})
         response.set_cookie("user_inventory_token", access_token, httponly=True, secure=False,samesite="lax")
         return access_token
+
+
+
+    @classmethod
+    async  def logout_or_401(cls,response = Response):
+        response.delete_cookie("user_inventory_token")
+
+
+

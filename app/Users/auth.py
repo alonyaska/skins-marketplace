@@ -3,7 +3,6 @@ from app.config import  settings
 from  jose import jwt
 from passlib.context import CryptContext
 from pydantic import EmailStr
-from app.Users.models import UsersModel
 from app.Users.dao import UsersDao
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

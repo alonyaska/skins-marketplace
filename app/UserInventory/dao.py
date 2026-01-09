@@ -16,7 +16,7 @@ class InventoryDao(BaseDao):
         async  with async_session_maker() as session:
             query = select(cls.model).filter_by(id=model_id).options(joinedload(cls.model.skin))
             result = await session.execute(query)
-            return result.scalar_one_or_none()
+            return result.scalars().all()
 
 
 

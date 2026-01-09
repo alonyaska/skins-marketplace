@@ -1,4 +1,4 @@
-
+from Demos.win32ts_logoff_disconnected import username
 from sqlalchemy import  select, insert
 
 from sqlalchemy.orm import joinedload
@@ -29,6 +29,14 @@ class BaseDao:
             return  result.scalar_one_or_none()
 
 
+    @classmethod
+    async def find_by_name(cls, model_name:str):
+        async  with async_session_maker() as session:
+            query = select(cls.model).filter_by(username=model_name)
+            result = await  session.execute(query)
+            return  result.scalar_one_or_none()
+
+
 
     @classmethod
     async  def get_one_or_none(cls, **filter_by):
@@ -44,7 +52,7 @@ class BaseDao:
     @classmethod
     async def get_all(cls, **filter_by):
         async with  async_session_maker() as session:
-            query = select(cls.model).filter_by(**filter_by)
+            query = select(cls.model).filter_by(**filter_by).options(joinedload(cls.model.skin))
             result = await session.execute(query)
             return result.scalars().all()
 
