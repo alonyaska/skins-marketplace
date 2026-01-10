@@ -20,3 +20,4 @@ class UserInventoryModel(Base):
 
     skin = relationship("SkinsModel", back_populates="inventory_entries")
     user = relationship("UsersModel", back_populates="inventory")
+    market_lots = relationship("MarketModel", back_populates="item")

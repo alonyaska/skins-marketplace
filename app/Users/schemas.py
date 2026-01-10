@@ -11,3 +11,9 @@ class SUserRegister(BaseModel):
 class SUserLogin(BaseModel):
     email: EmailStr
     password:str
+
+
+class SUsers(BaseModel):
+    id: int
+    user:str
+

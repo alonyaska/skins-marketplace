@@ -11,12 +11,14 @@ from app.UserInventory.router import router as router_inventory
 from  app.skins.router import router as router_skins
 from app.Users.models import UsersModel
 from app.Users.router import router as router_users
+from app.Market.router import router as router_market
 
 
 
 
 app = FastAPI()
 app.include_router(router_users)
+app.include_router(router_market)
 app.include_router(router_inventory)
 app.include_router(router_skins)
 

@@ -15,6 +15,7 @@ from app.database import Base
 from app.skins.models import SkinsModel
 from app.Users.models import UsersModel
 from app.UserInventory.models import  UserInventoryModel
+from  app.Market.models import MarketModel
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

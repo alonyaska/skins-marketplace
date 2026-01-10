@@ -17,3 +17,4 @@ class UsersModel(Base):
     avatar_id =Column(Integer)
 
     inventory = relationship("UserInventoryModel", back_populates="user")
+    sales = relationship("MarketModel", back_populates="seller")
