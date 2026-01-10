@@ -39,3 +39,7 @@ class IncorrectTokenType(InventoryException):
 class InventoryNotFound(InventoryException):
     status_code = status.HTTP_404_NOT_FOUND
     detail = "Inventory or skin not Found"
+
+class SkinAlreadyOnMarket(InventoryException):
+    status_code = status.HTTP_409_CONFLICT
+    detail = "Skin already on Market"
