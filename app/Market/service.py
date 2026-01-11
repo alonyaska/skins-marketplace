@@ -12,3 +12,5 @@ class MarketService:
         if not result:
             raise  InventoryNotFound()
         return  result
+
+

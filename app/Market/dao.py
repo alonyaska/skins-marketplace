@@ -1,12 +1,13 @@
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.orm import joinedload
 
 from app.Market.models import MarketModel
 from app.UserInventory.models import UserInventoryModel
+from app.Users.models import UsersModel
 from app.dao.base import BaseDao
 from app.database import async_session_maker
-from app.exceptions import InventoryNotFound, SkinAlreadyOnMarket
+from app.exceptions import InventoryNotFound, SkinAlreadyOnMarket, NotEnoughMoney
 
 
 class MarketDao(BaseDao):
@@ -55,3 +56,46 @@ class MarketDao(BaseDao):
             await  session.commit()
 
             return {"status": "succes"}
+
+
+
+
+    @classmethod
+    async def buy_lot_on_market(cls, buyer_id:int, inventory_id:int):
+        async  with async_session_maker() as session:
+            query = select(MarketModel).filter_by(inventory_id = inventory_id)
+            result = await session.execute(query)
+            market_item = result.scalar_one_or_none()
+            if not market_item:
+                raise InventoryNotFound
+            if market_item.seller_id == buyer_id:
+                raise  SkinAlreadyOnMarket
+
+            buyer_query = select(UsersModel).filter_by(id=buyer_id)
+            buyer_result = await session.execute(buyer_query)
+            buyer = buyer_result.scalar_one_or_none()
+
+
+            if buyer.balance < market_item.price:
+                raise NotEnoughMoney
+
+
+            select_query = select(UsersModel).filter_by(id=market_item.seller_id)
+            seller_result = await session.execute(select_query)
+            seller = seller_result.scalar_one()
+
+            buyer.balance -= market_item.price
+            seller.balance += market_item.price
+
+
+            update_inv_query = (
+                update(UserInventoryModel)
+                .where(UserInventoryModel.id == inventory_id)
+                .values(user_id=buyer_id)
+            )
+            await session.execute(update_inv_query)
+            await session.delete(market_item)
+            await  session.commit()
+            return {"status": "succes", "new_balance": buyer.balance}
+
+

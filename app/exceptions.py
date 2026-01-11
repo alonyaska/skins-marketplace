@@ -43,3 +43,8 @@ class InventoryNotFound(InventoryException):
 class SkinAlreadyOnMarket(InventoryException):
     status_code = status.HTTP_409_CONFLICT
     detail = "Skin already on Market"
+
+
+class NotEnoughMoney(InventoryException):
+    status_code = status.HTTP_402_PAYMENT_REQUIRED
+    detail = "Not Enough Money"

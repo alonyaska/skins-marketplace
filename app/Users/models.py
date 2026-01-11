@@ -13,7 +13,7 @@ class UsersModel(Base):
     username = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False)
     hashed_password = Column(String, nullable=False)
-    balance = Column(Integer)
+    balance = Column(Integer, default=0,nullable=False)
     avatar_id =Column(Integer)
 
     inventory = relationship("UserInventoryModel", back_populates="user")

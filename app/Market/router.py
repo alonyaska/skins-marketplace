@@ -25,3 +25,12 @@ async def  add_skin_on_market(
         user: UsersModel = Depends(get_current_user)
 ):
     await  MarketDao.add(user.id, inventory_id, price)
+
+
+
+@router.post("/buy")
+async  def buy_skin_on_market(
+        inventory_id: int,
+        user: UsersModel = Depends(get_current_user)
+):
+    await  MarketDao.buy_lot_on_market(buyer_id=user.id, inventory_id=inventory_id)
