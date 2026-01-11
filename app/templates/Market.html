@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Market</title>
+</head>
+<body>
+    <div>
+        {%for market in markets%}
+        <div>
+            <img src="{{url_for('static',path='images/' + market.item.skin.image_id|string + '.webp')}}" width="300">
+            <h1>{{market.item.skin.name}}</h1>
+            <h2>{{market.item.skin.rarity}}</h2>
+            <h4>{{market.price}}</h4>
+        </div>
+
+
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -12,15 +12,24 @@ from  app.skins.router import router as router_skins
 from app.Users.models import UsersModel
 from app.Users.router import router as router_users
 from app.Market.router import router as router_market
+from  app.pages.router import router as router_pages
+from  fastapi.staticfiles import StaticFiles
+from  app.images.router import router as router_images
 
 
 
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="app/static"), "static")
+
 app.include_router(router_users)
 app.include_router(router_market)
+app.include_router(router_images)
+app.include_router(router_pages)
 app.include_router(router_inventory)
 app.include_router(router_skins)
+
 
 class SkinsArgSearch:
     def __init__(
