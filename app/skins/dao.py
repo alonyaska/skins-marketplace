@@ -1,8 +1,10 @@
-from app.dao.base import BaseDao
+
+from app.dao.skins_base import SkinsBaseDao
 from app.skins.models import SkinsModel
 
 
-class SkinsDao(BaseDao):
+class SkinsDao(SkinsBaseDao):
     model = SkinsModel
+
 
 

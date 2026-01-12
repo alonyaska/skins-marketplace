@@ -30,13 +30,14 @@ app.include_router(router_skins)
 
 origins = [
     "http://localhost:8000",
+    "http://127.0.0.1:8000"
 ]
 
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credential=True,
+    allow_credentials=True,
     allow_methods=["GET","POST","PATH","DELETE","PUT"],
     allow_headers = ["*"] # но лучше прописывать ради безапасности
 
