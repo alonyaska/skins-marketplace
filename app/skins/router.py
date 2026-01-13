@@ -17,13 +17,14 @@ async def get_all_skins():
 
 @router.get("/filter")
 async  def get_skin_by_filter(
+    user_id:int =  None,
     name: str = None,
     rarity: str = None,
     type_weapon:str = None,
     min_price: int = None,
     max_price: int = None
 ):
-    return  await SkinsService.get_all_skins_by_filter(name, rarity,type_weapon ,min_price, max_price)
+    return  await SkinsService.get_all_skins_by_filter(user_id,name, rarity,type_weapon ,min_price, max_price)
 
 
 @router.get("/{id}")

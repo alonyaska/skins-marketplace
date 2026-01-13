@@ -26,6 +26,7 @@ class SkinsService:
     @classmethod
     async  def get_all_skins_by_filter(
             cls,
+            user_id: int = Query(None, description="Поиск по id"),
             name: str = Query(None, description="Поиск по названию"),
             rarity: str = Query(None, description="Фильтр по редкости"),
             type_weapon: str = Query(None, description="Фильтр по типу Оружия"),
@@ -33,6 +34,7 @@ class SkinsService:
             max_price: int = Query(None, description="Максимальная цена")
         ) -> list[SSkins]:
         return  await  SkinsDao.apply_filtres(
+            user_id=user_id,
             name=name,
             rarity=rarity,
             type_weapon=type_weapon,

@@ -21,6 +21,7 @@ class SkinsBaseDao(BaseDao):
     @classmethod
     async def apply_filtres(
             cls,
+            user_id:int,
             name: str = None ,
             type_weapon: str =None,
             rarity: str = None,
@@ -41,7 +42,15 @@ class SkinsBaseDao(BaseDao):
              query = query.filter(cls.model.price <= max_price)
          if type_weapon:
              query = query.filter(cls.model.type_weapon.ilike(f"%{type_weapon}%"))
+         if user_id is not None:
+             query=query.filter(cls.model.id == user_id)
 
 
          result = await  session.execute(query)
          return result.scalars().all()
+
+
+
+
+
+
