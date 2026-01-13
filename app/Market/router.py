@@ -34,3 +34,20 @@ async  def buy_skin_on_market(
         user: UsersModel = Depends(get_current_user)
 ):
     await  MarketDao.buy_lot_on_market(buyer_id=user.id, inventory_id=inventory_id)
+
+
+@router.get("/filter")
+async def filter_market(
+        name: str = None,
+        rarity: str = None,
+        type_weapon:str = None,
+        min_price: int = None,
+        max_price: int = None
+):
+    return  await MarketService.get_all_filtered_market(
+        name=name,
+        rarity=rarity,
+        type_weapon=type_weapon,
+        min_price=min_price,
+        max_price=max_price
+    )
