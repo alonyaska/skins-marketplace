@@ -17,6 +17,7 @@ class SkinsModel(Base):
     date = Column(Integer, nullable=False)
     asset = Column(JSON)
     rarity = Column(String, nullable=False)
+    type_weapon = Column(String,nullable=False)
     image_id = Column(Integer)
 
     inventory_entries = relationship("UserInventoryModel", back_populates="skin")

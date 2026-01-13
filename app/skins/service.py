@@ -28,12 +28,14 @@ class SkinsService:
             cls,
             name: str = Query(None, description="Поиск по названию"),
             rarity: str = Query(None, description="Фильтр по редкости"),
+            type_weapon: str = Query(None, description="Фильтр по типу Оружия"),
             min_price: int = Query(None, description="Минимальная цена"),
             max_price: int = Query(None, description="Максимальная цена")
         ) -> list[SSkins]:
         return  await  SkinsDao.apply_filtres(
             name=name,
             rarity=rarity,
+            type_weapon=type_weapon,
             min_price=min_price,
             max_price=max_price
         )

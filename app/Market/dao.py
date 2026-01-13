@@ -63,39 +63,36 @@ class MarketDao(BaseDao):
     @classmethod
     async def buy_lot_on_market(cls, buyer_id:int, inventory_id:int):
         async  with async_session_maker() as session:
-            query = select(MarketModel).filter_by(inventory_id = inventory_id)
-            result = await session.execute(query)
-            market_item = result.scalar_one_or_none()
-            if not market_item:
-                raise InventoryNotFound
-            if market_item.seller_id == buyer_id:
-                raise  SkinAlreadyOnMarket
-
-            buyer_query = select(UsersModel).filter_by(id=buyer_id)
-            buyer_result = await session.execute(buyer_query)
-            buyer = buyer_result.scalar_one_or_none()
+            async  with session.begin():
+                query = select(MarketModel).filter_by(inventory_id = inventory_id).with_for_update()
+                result = await session.execute(query)
+                market_item = result.scalar_one_or_none()
+                if not market_item:
+                    raise InventoryNotFound
+                if market_item.seller_id == buyer_id:
+                    raise  SkinAlreadyOnMarket
 
 
-            if buyer.balance < market_item.price:
-                raise NotEnoughMoney
+                buyer = await session.get(UsersModel,buyer_id,with_for_update=True)
+                seller = await  session.get(UsersModel,market_item.seller_id, with_for_update=True)
 
 
-            select_query = select(UsersModel).filter_by(id=market_item.seller_id)
-            seller_result = await session.execute(select_query)
-            seller = seller_result.scalar_one()
-
-            buyer.balance -= market_item.price
-            seller.balance += market_item.price
+                if buyer.balance < market_item.price:
+                    raise NotEnoughMoney
 
 
-            update_inv_query = (
-                update(UserInventoryModel)
-                .where(UserInventoryModel.id == inventory_id)
-                .values(user_id=buyer_id)
-            )
-            await session.execute(update_inv_query)
-            await session.delete(market_item)
-            await  session.commit()
-            return {"status": "succes", "new_balance": buyer.balance}
+
+                buyer.balance -= market_item.price
+                seller.balance += market_item.price
+
+
+                update_inv_query = (
+                    update(UserInventoryModel)
+                    .where(UserInventoryModel.id == inventory_id)
+                    .values(user_id=buyer_id)
+                )
+                await session.execute(update_inv_query)
+                await session.delete(market_item)
+                return {"status": "succes", "new_balance": buyer.balance}
 
 

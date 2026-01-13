@@ -19,10 +19,11 @@ async def get_all_skins():
 async  def get_skin_by_filter(
     name: str = None,
     rarity: str = None,
+    type_weapon:str = None,
     min_price: int = None,
     max_price: int = None
 ):
-    return  await SkinsService.get_all_skins_by_filter(name, rarity,min_price, max_price)
+    return  await SkinsService.get_all_skins_by_filter(name, rarity,type_weapon ,min_price, max_price)
 
 
 @router.get("/{id}")
