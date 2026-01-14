@@ -14,7 +14,10 @@ class MarketDao(BaseDao):
     model = MarketModel
 
     @classmethod
-    async def get_all_lots(cls):
+    async def get_all_lots(
+            cls,
+            limit:int,
+            offset:int):
         async with async_session_maker() as session:
             query = (
                 select(cls.model)
@@ -23,6 +26,7 @@ class MarketDao(BaseDao):
                     .joinedload(UserInventoryModel.skin)  # Пробрасываем до библиотеки скинов
                 )
             )
+            query = query.limit(limit).offset(offset)
             result = await session.execute(query)
             return result.scalars().all()
 

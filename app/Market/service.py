@@ -1,7 +1,8 @@
+
 from fastapi import Query
 
 from app.Market.dao import MarketDao
-from app.exceptions import InventoryNotFound
+from app.exceptions import InventoryIsNull
 from app.skins.dao import SkinsDao
 
 
@@ -10,10 +11,17 @@ class MarketService:
 
 
     @classmethod
-    async  def get_all_market_or_404(cls, **filter_by):
-        result =  await MarketDao.get_all_lots()
+    async  def get_all_market_or_404(
+            cls,
+            limit:int,
+            offset:int
+        ):
+        result =  await MarketDao.get_all_lots(
+            limit=limit,
+            offset=offset
+        )
         if not result:
-            raise  InventoryNotFound()
+            raise  InventoryIsNull()
         return  result
 
 

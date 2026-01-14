@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends
+
+
+from fastapi import APIRouter, Depends, Query
 
 from app.Market.dao import MarketDao
 from app.Market.service import MarketService
@@ -14,8 +16,14 @@ router = APIRouter(
 
 
 @router.get("")
-async  def get_all_market():
-    return  await MarketService.get_all_market_or_404()
+async  def get_all_market(
+        limit:int =  Query(10, ge=1, le=100),
+        offset:int = Query(0, ge=0)
+):
+    return  await MarketService.get_all_market_or_404(
+        limit=limit,
+        offset=offset
+    )
 
 
 @router.post("")

@@ -1,3 +1,4 @@
+
 from fastapi import Query
 
 
@@ -19,8 +20,15 @@ class SkinsService:
 
 
     @classmethod
-    async def get_all_skins(cls):
-        return  await SkinsDao.get_all_skins()
+    async def get_all_skins(
+                            cls,
+                            limit:int,
+                            offset:int
+    ):
+        return  await SkinsDao.get_all_skins(
+            limit=limit,
+            offset=offset
+        )
 
 
     @classmethod

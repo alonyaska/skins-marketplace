@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 
 from app.skins.service import SkinsService
 from app.skins.sсhemas import SSkins
@@ -11,8 +11,14 @@ router  = APIRouter(
 
 
 @router.get("", response_model=list[SSkins])
-async def get_all_skins():
-    return  await SkinsService.get_all_skins()
+async def get_all_skins(
+        limit:int = Query(10, ge=1, le=100),
+        offset:int = Query(0, ge=0)
+):
+    return  await SkinsService.get_all_skins(
+        limit=limit,
+        offset=offset
+    )
 
 
 @router.get("/filter")

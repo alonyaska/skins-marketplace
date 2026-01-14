@@ -13,11 +13,15 @@ class SkinsBaseDao(BaseDao):
 
 
     @classmethod
-    async  def get_all_skins(cls):
+    async  def get_all_skins(
+            cls,
+            limit:int,
+            offset:int
+    ):
         async  with  async_session_maker() as session:
             query = select(cls.model)
+            query = query.limit(limit).offset(offset)
             result = await session.execute(query)
-            print(f"DEBUG: {result}")
             return  result.scalars().all()
 
 
