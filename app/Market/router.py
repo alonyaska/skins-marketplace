@@ -1,6 +1,7 @@
-
+import asyncio
 
 from fastapi import APIRouter, Depends, Query
+from fastapi_cache.decorator import cache
 
 from app.Market.dao import MarketDao
 from app.Market.service import MarketService
@@ -16,6 +17,7 @@ router = APIRouter(
 
 
 @router.get("")
+@cache(expire=60)
 async  def get_all_market(
         limit:int =  Query(10, ge=1, le=100),
         offset:int = Query(0, ge=0)
@@ -45,6 +47,7 @@ async  def buy_skin_on_market(
 
 
 @router.get("/filter")
+@cache(expire=60)
 async def filter_market(
         name: str = None,
         rarity: str = None,

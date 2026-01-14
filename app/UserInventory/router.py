@@ -1,5 +1,6 @@
 from fastapi import  APIRouter
 from fastapi.params import Depends
+from fastapi_cache.decorator import cache
 
 from app.UserInventory.schemas import SUserInventory
 from app.UserInventory.service import InventoryService
@@ -13,12 +14,14 @@ router =  APIRouter(
     )
 
 
-@router.get("") #response_model=list[SUserInventory])
+@router.get("")
+@cache(expire=60)#response_model=list[SUserInventory])
 async  def get_inventory(user: SUserInventory = Depends(get_current_user)) -> list[SUserInventory] :
      return  await InventoryService.find_all_or_404(user_id = user.id)
 
 
 @router.get("/filter")
+@cache(expire=60)
 async def get_filter_inventory(
         user: SUserInventory = Depends(get_current_user),
         name: str = None,
@@ -38,6 +41,7 @@ async def get_filter_inventory(
 
 
 @router.get("/{id}")
+@cache(expire=60)
 async def get_inventory_by_id(id:int):
     return  await  InventoryService.get_by_id_or_404(id)
 

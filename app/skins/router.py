@@ -1,4 +1,7 @@
+import asyncio
+
 from fastapi import APIRouter, Query
+from fastapi_cache.decorator import cache
 
 from app.skins.service import SkinsService
 from app.skins.sсhemas import SSkins
@@ -11,10 +14,12 @@ router  = APIRouter(
 
 
 @router.get("", response_model=list[SSkins])
+@cache(expire=60)
 async def get_all_skins(
         limit:int = Query(10, ge=1, le=100),
         offset:int = Query(0, ge=0)
 ):
+    await  asyncio.sleep(3)
     return  await SkinsService.get_all_skins(
         limit=limit,
         offset=offset
@@ -22,6 +27,7 @@ async def get_all_skins(
 
 
 @router.get("/filter")
+@cache(expire=60)
 async  def get_skin_by_filter(
     user_id:int =  None,
     name: str = None,
