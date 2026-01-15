@@ -17,3 +17,15 @@ class SMarket(BaseModel):
     seller: SUsers| None = None
 
     model_config = ConfigDict(from_attributes=True)
+
+
+
+class SBuyResult(BaseModel):
+    inventory_id: int
+    price: int
+    seller_id: int
+    buyer_id: int
+    buyer_new_balance: int
+
+
+    model_config = ConfigDict(from_attributes=True)

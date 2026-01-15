@@ -15,12 +15,13 @@ from  fastapi.staticfiles import StaticFiles
 from  app.images.router import router as router_images
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.decorator import cache
+from app.config import settings
 
 from redis import asyncio as aioredis
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
-    redis = aioredis.from_url("redis://localhost:6379")
+    redis = aioredis.from_url(f"redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}")
     FastAPICache.init(RedisBackend(redis), prefix="cache")
     yield
 
