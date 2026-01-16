@@ -12,6 +12,11 @@ from app.Market.models import MarketModel
 class SkinsBaseDao(BaseDao):
 
 
+
+
+
+
+
     @classmethod
     async  def get_all_skins(
             cls,
@@ -102,3 +107,30 @@ class SkinsBaseDao(BaseDao):
 
 
 
+    @classmethod
+    async def apply_filter_inventory(
+            cls,
+            user_id:int,
+            name: str = None,
+            type_weapon: str = None,
+            rarity: str = None,
+                  ):
+        async  with async_session_maker() as session:
+            query = select(UserInventoryModel).join(
+                UserInventoryModel.skin
+            ).filter(UserInventoryModel.user_id == user_id)
+
+            if name:
+                query = query.filter(SkinsModel.name.ilike(f"%{name}%"))
+            if type_weapon:
+                query = query.filter(SkinsModel.type_weapon.ilike(f"%{type_weapon}%"))
+            if rarity:
+                query = query.filter(SkinsModel.rarity.ilike(f"%{rarity}%"))
+
+
+            query = query.options(
+                joinedload(UserInventoryModel.skin)
+            )
+
+            result = await session.execute(query)
+            return  result.scalars().all()

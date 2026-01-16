@@ -1,5 +1,5 @@
 from fastapi import  APIRouter
-from fastapi.params import Depends
+from fastapi.params import Depends, Query
 from fastapi_cache.decorator import cache
 
 from app.UserInventory.schemas import SUserInventory
@@ -17,27 +17,23 @@ router =  APIRouter(
 @router.get("")
 @cache(expire=60)#response_model=list[SUserInventory])
 async  def get_inventory(user: SUserInventory = Depends(get_current_user)) -> list[SUserInventory] :
-     return  await InventoryService.find_all_or_404(user_id = user.id)
+     return  await InventoryService.get_inventory_or_404(user_id = user.id)
 
 
 @router.get("/filter")
 @cache(expire=60)
 async def get_filter_inventory(
         user: SUserInventory = Depends(get_current_user),
-        name: str = None,
-        rarity: str = None,
-        type_weapon:str = None,
-        min_price: int = None,
-        max_price: int = None
-
+        name: str | None = Query(None, description="Поиск по названию скина"),
+        rarity: str | None = Query(None, description="Фильтр по редкости (Base, Covert и т.д.)"),
+        type_weapon: str | None = Query(None, description="Тип оружия (Knife, Rifle)"),
 ) -> list[SSkins]:
     return  await InventoryService.filtered_inventory(
         user_id = user.id,
         name=name,
         rarity=rarity,
         type_weapon=type_weapon,
-        min_price=min_price,
-        max_price=max_price)
+        )
 
 
 @router.get("/{id}")
