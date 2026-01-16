@@ -8,6 +8,7 @@ from app.skins.models import SkinsModel
 
 class UserAdmin(ModelView, model=UsersModel):
     column_list = [UsersModel.id,UsersModel.email ,UsersModel.username, UsersModel.balance]
+    can_create = False
     can_delete = False
     name = "Пользователь"
     name_plural = "Пользователи"
@@ -57,6 +58,7 @@ class SkinsModelAdmin(ModelView, model=SkinsModel):
 class MarketModelAdmin(ModelView, model=MarketModel):
 
     column_list = [
+        MarketModel.id,
         MarketModel.inventory_id,
         MarketModel.seller_id,
         MarketModel.price,

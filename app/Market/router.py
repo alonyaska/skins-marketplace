@@ -81,3 +81,14 @@ async def filter_market(
         min_price=min_price,
         max_price=max_price
     )
+
+@router.delete("")
+async  def delete_lot(
+        lot_id:int = Query(None, description="айди лота для удаления"),
+        user: UsersModel = Depends(get_current_user),
+
+):
+    return  await MarketService.delete_lot_market(
+        lot_id=lot_id,
+        user_id = user.id
+    )

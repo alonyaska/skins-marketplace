@@ -44,4 +44,17 @@ class MarketService:
         )
 
 
+    @classmethod
+    async  def delete_lot_market(
+            cls,
+            lot_id:int,
+            user_id:int
+                                 ):
+
+        return  await MarketDao.delete_market_lot(
+            user_id=user_id,
+            lot_id=lot_id
+        )
+
+
 

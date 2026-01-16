@@ -1,5 +1,5 @@
 
-from sqlalchemy import select, update
+from sqlalchemy import select, update, delete
 from sqlalchemy.orm import joinedload
 
 from app.Market.models import MarketModel
@@ -33,7 +33,7 @@ class MarketDao(BaseDao):
     @classmethod
     async def add(cls, user_id: int, inventory_id: int, price: int):
         async with async_session_maker() as session:
-            # 1. Проверки (оставляем как есть)
+
             query = select(UserInventoryModel).filter_by(id=inventory_id, user_id=user_id)
             result = await session.execute(query)
             item = result.scalar_one_or_none()
@@ -45,22 +45,24 @@ class MarketDao(BaseDao):
             if check_result.scalar_one_or_none():
                 raise SkinAlreadyOnMarket
 
-            # 2. Создание записи
+            #  Создание записи
             new_sale = MarketModel(
                 inventory_id=inventory_id,
                 seller_id=user_id,
-                price=price
+                price=price,
             )
+
+
+            item.is_on_sale = True
             session.add(new_sale)
 
-            # 3. Фиксация в БД
+
             await session.commit()
 
-            # 4. МАГИЯ ТУТ: Обновляем объект, чтобы в нем появились ID и created_at из БД
+
             await session.refresh(new_sale)
 
-            # 5. Возвращаем объект в виде словаря (или сам объект)
-            # Если у тебя нет метода to_dict(), можно сделать так:
+
             return {
                 "id": new_sale.id,
                 "inventory_id": new_sale.inventory_id,
@@ -118,3 +120,33 @@ class MarketDao(BaseDao):
 
                 return deal_data
 
+    @classmethod
+    async def delete_market_lot(
+            cls,
+            lot_id:int,
+            user_id:int
+    ):
+        async  with async_session_maker() as session:
+            query = select(cls.model).filter_by(id=lot_id,seller_id=user_id)
+            result = await session.execute(query)
+            lot = result.scalar_one_or_none()
+
+
+            if not lot:
+                raise InventoryNotFound
+
+            inventory_id=lot.inventory_id
+
+
+            await  session.delete(lot)
+
+
+            upd_inv_query = (
+                update(UserInventoryModel).filter_by(id=inventory_id).values(is_on_sale=False)
+            )
+
+            await  session.execute(upd_inv_query)
+
+
+            await  session.commit()
+            return
