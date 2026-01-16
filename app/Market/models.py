@@ -22,3 +22,5 @@ class MarketModel(Base):
 
     item = relationship("UserInventoryModel", back_populates="market_lots")
     seller = relationship("UsersModel", back_populates="sales")
+    def __str__(self):
+        return f"{self.price} ({self.created_at})"

@@ -1,11 +1,13 @@
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-
+from sqladmin import Admin,ModelView
 from fastapi import  FastAPI
 from fastapi_cache import FastAPICache
 from starlette.middleware.cors import CORSMiddleware
 
 from app.UserInventory.router import router as router_inventory
+from app.admin.views import UserAdmin, UserInventAdmin, SkinsModelAdmin, MarketModelAdmin
+from app.database import engine
 from  app.skins.router import router as router_skins
 from app.Users.models import UsersModel
 from app.Users.router import router as router_users
@@ -54,6 +56,17 @@ app.add_middleware(
     allow_headers = ["*"] # но лучше прописывать ради безапасности
 
 )
+
+admin = Admin(app, engine)
+
+
+
+
+
+admin.add_view(UserAdmin)
+admin.add_view(UserInventAdmin)
+admin.add_view(SkinsModelAdmin)
+admin.add_view(MarketModelAdmin)
 
 
 

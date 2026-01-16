@@ -22,3 +22,5 @@ class SkinsModel(Base):
 
     inventory_entries = relationship("UserInventoryModel", back_populates="skin")
 
+    def __str__(self):
+        return f"{self.name} ({self.rarity})"

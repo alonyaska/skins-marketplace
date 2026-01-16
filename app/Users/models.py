@@ -5,7 +5,7 @@ from  app.database import Base
 
 
 
-class UsersModel(Base):
+class  UsersModel(Base):
     __tablename__ = "users"
 
 
@@ -18,3 +18,7 @@ class UsersModel(Base):
 
     inventory = relationship("UserInventoryModel", back_populates="user")
     sales = relationship("MarketModel", back_populates="seller")
+
+
+    def __str__(self):
+        return f"{self.username} ({self.email})"
