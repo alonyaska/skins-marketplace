@@ -6,6 +6,7 @@ from fastapi_cache import FastAPICache
 from starlette.middleware.cors import CORSMiddleware
 
 from app.UserInventory.router import router as router_inventory
+from app.admin.auth import authentication_backend
 from app.admin.views import UserAdmin, UserInventAdmin, SkinsModelAdmin, MarketModelAdmin
 from app.database import engine
 from  app.skins.router import router as router_skins
@@ -57,7 +58,7 @@ app.add_middleware(
 
 )
 
-admin = Admin(app, engine)
+admin = Admin(app, engine, authentication_backend=authentication_backend)
 
 
 
