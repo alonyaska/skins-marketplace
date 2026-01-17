@@ -68,7 +68,7 @@ class MarketDao(BaseDao):
                 "inventory_id": new_sale.inventory_id,
                 "seller_id": new_sale.seller_id,
                 "price": new_sale.price,
-                "created_at": new_sale.created_at  # Если это поле есть в модели
+                "created_at": new_sale.created_at
             }
 
     @classmethod

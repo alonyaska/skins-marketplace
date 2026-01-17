@@ -39,3 +39,12 @@ class UsersService:
 
 
 
+    @classmethod
+    async def deposit_or_401_403(cls,user_id:int, deposit:int):
+        return  await  UsersDao.add_money(
+            user_id=user_id,
+            deposit=deposit
+        )
+
+
+

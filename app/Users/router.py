@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Response, Depends
+from fastapi import APIRouter, Response, Depends, Query
 
 from app.UserInventory.schemas import SUserInventory
 from app.Users.dependencies import get_current_user
+from app.Users.models import UsersModel
 from app.Users.schemas import SUserRegister, SUserLogin
 from app.Users.service import UsersService
 
@@ -30,5 +31,12 @@ async  def logout_user(response: Response):
 
 
 @router.get("/me")
-async  def  read_users_me(currrent_user: SUserInventory = Depends(get_current_user)):
-    return currrent_user
+async  def  read_users_me(current_user: SUserInventory = Depends(get_current_user)):
+    return current_user
+
+
+@router.post("/deposit")
+async  def  deposit_to_user(user: UsersModel = Depends(get_current_user),
+                            deposit:int = Query(None, description="Сколько хотите пополнить")
+                            ):
+    return await  UsersService.deposit_or_401_403(user_id=user.id,deposit=deposit)

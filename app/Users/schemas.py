@@ -17,3 +17,7 @@ class SUsers(BaseModel):
     id: int
     user:str
 
+
+class SUserBal(BaseModel):
+    id:int
+    balance:int

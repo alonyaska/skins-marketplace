@@ -54,3 +54,8 @@ class NotEnoughMoney(InventoryException):
 class InventoryIsNull(InventoryException):
     status_code = status.HTTP_404_NOT_FOUND
     detail = "No skins found. You may have set your filter criteria too strict"
+
+
+class DepositConflict(InventoryException):
+    status_code = status.HTTP_402_PAYMENT_REQUIRED
+    detail = "Invalid deposit format"
