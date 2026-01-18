@@ -1,6 +1,6 @@
 
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Body
 from fastapi_cache.decorator import cache
 from pydantic import TypeAdapter
 
@@ -33,30 +33,49 @@ async  def get_all_market(
     )
 
 
+from fastapi import HTTPException, status
+
 @router.post("")
 async def add_skin_on_market(
-        inventory_id: int,
-        price: int,
+        inventory_id: int = Body(..., embed=True),
+        price: int = Body(..., embed=True),
         user: UsersModel = Depends(get_current_user)
 ):
 
-    add_market = await MarketDao.add(user_id=user.id, inventory_id=inventory_id, price=price)
+    if price <= 0:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Цена должна быть больше нуля"
+        )
+
+    add_market = await MarketDao.add(
+        user_id=user.id,
+        inventory_id=inventory_id,
+        price=price
+    )
+
+
+    if not add_market:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Предмет не найден или не принадлежит вам"
+        )
 
 
     try:
         add_market_dict = market_adapter.validate_python(add_market).model_dump()
+        send_market_confirm.delay(add_market_dict, user.email)
+        return add_market_dict
     except Exception as e:
-        print(f"Ошибка валидации: {e}")
-        return {"error": "БД вернула неполные данные", "details": str(add_market)}
 
-    send_market_confirm.delay(add_market_dict, user.email)
-
-    return add_market_dict
-
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Ошибка обработки данных: {str(e)}"
+        )
 
 @router.post("/buy")
 async  def buy_skin_on_market(
-        inventory_id: int,
+        inventory_id: int = Body(..., embed=True),
         user: UsersModel = Depends(get_current_user)
 ):
     buy_skin = await  MarketDao.buy_lot_on_market(buyer_id=user.id, inventory_id=inventory_id)

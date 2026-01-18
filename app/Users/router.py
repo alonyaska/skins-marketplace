@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Response, Depends, Query
+from fastapi import APIRouter, Response, Depends, Query, Body
 
 from app.UserInventory.schemas import SUserInventory
 from app.Users.dependencies import get_current_user
@@ -37,6 +37,6 @@ async  def  read_users_me(current_user: SUserInventory = Depends(get_current_use
 
 @router.post("/deposit")
 async  def  deposit_to_user(user: UsersModel = Depends(get_current_user),
-                            deposit:int = Query(None, description="Сколько хотите пополнить")
+                            deposit:int = Body(None, description="Сколько хотите пополнить", embed=True)
                             ):
     return await  UsersService.deposit_or_401_403(user_id=user.id,deposit=deposit)

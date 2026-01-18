@@ -1,0 +1,9 @@
+[
+  {
+    "id": 1,
+    "inventory_id": 10,
+    "seller_id": 10,
+    "price": 2700,
+    "created_at": "2026-01-18"
+  }
+]

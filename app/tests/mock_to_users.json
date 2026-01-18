@@ -1,0 +1,14 @@
+[
+  {
+    "id": 10,
+    "username": "gamer",
+    "email": "gamer777@example.com",
+    "hashed_password": "hashed_password_123"
+  },
+  {
+    "id": 11,
+    "username": "trader",
+    "email": "Morkovnik@gmail.com",
+    "hashed_password": "$2b$12$imL6Du0z7xcCZHtaMUt7z.iKhX5gETPnsupXuS4de7L0pZntW4Z7q"
+  }
+]

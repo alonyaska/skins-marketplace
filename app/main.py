@@ -17,7 +17,6 @@ from  app.pages.router import router as router_pages
 from  fastapi.staticfiles import StaticFiles
 from  app.images.router import router as router_images
 from fastapi_cache.backends.redis import RedisBackend
-from fastapi_cache.decorator import cache
 from app.config import settings
 
 from redis import asyncio as aioredis
@@ -31,7 +30,7 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(lifespan=lifespan,)
 
 app.mount("/static", StaticFiles(directory="app/static"), "static")
 

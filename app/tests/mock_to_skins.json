@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "name": "AK-47 | Redline",
+    "price": 3000,
+    "date": 1705574400,
+    "rarity": "Covert",
+    "type_weapon": "Riffle",
+    "image_id": 1,
+    "asset": {}
+  },
+  {
+    "id": 2,
+    "name": "AWP | Dragon Lore",
+    "price": 150000,
+    "date": 1705574400,
+    "rarity": "Legendary",
+    "type_weapon": "Sniper",
+    "image_id": 2,
+    "asset": {}
+  }
+]

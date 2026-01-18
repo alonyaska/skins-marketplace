@@ -20,7 +20,7 @@ class UserNotRegister(InventoryException):
 
 
 class UserAlreadyExistException(InventoryException):
-    status_code = status.HTTP_401_UNAUTHORIZED,
+    status_code = status.HTTP_401_UNAUTHORIZED
     detail = "User already registered"
 
 class TokenIsExpireException(InventoryException):
