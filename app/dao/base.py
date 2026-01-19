@@ -1,4 +1,4 @@
-from Demos.win32ts_logoff_disconnected import username
+
 from sqlalchemy import  select, insert
 
 from sqlalchemy.orm import joinedload
