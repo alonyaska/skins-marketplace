@@ -78,6 +78,10 @@ Email-уведомления: При выставлении скина на пр
 6. **Admin Panel:** Админ панель.
 <img width="1904" height="875" alt="изображение" src="https://github.com/user-attachments/assets/e4f4927a-5ef0-48e2-98dc-2878bcd21511" />
 
+7. **Тесты:** Результаты Unit, Integration and E2E тестов.
+<img width="1807" height="320" alt="изображение" src="https://github.com/user-attachments/assets/65b65c41-e725-4b98-8ef2-1e67f0a9fa9b" />
+
+
 
 
 
